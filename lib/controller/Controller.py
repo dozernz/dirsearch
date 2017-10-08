@@ -258,7 +258,8 @@ class Controller(object):
                                 path.status)) and not (
                             self.suppressEmpty and (len(path.response.body) == 0)):
                 self.output.statusReport(path.path, path.response)
-                self.addDirectory(path.path)
+                if path.status in [200,301,302]:
+                    self.addDirectory(path.path)
                 self.reportManager.addPath(self.currentDirectory + path.path, path.status, path.response)
                 self.reportManager.save()
                 del path
@@ -338,6 +339,9 @@ class Controller(object):
             if path in [directory + '/' for directory in self.excludeSubdirs]:
                 return False
             self.directories.put(self.currentDirectory + path)
+            return True
+        elif not path.endswith("/"):
+            self.directories.put(self.currentDirectory + path + "/")
             return True
         else:
             return False
