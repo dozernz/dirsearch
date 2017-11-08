@@ -48,8 +48,8 @@ class ArgumentParser(object):
         else:
             self.urlList = [options.url]
         if options.extensions == None:
-            print('No extension specified. You must specify at least one extension')
-            exit(0)
+            print('No extension specified.')
+            
         with File(options.wordlist) as wordlist:
             if not wordlist.exists():
                 print('The wordlist file does not exist')
@@ -76,8 +76,12 @@ class ArgumentParser(object):
                 exit(0)
         else:
             self.headers = {}
-
-        self.extensions = list(oset([extension.strip() for extension in options.extensions.split(',')]))
+            
+        if options.extensions != None:
+            self.extensions = list(oset([extension.strip() for extension in options.extensions.split(',')]))
+        else:
+            self.extensions = []
+            
         self.useragent = options.useragent
         self.useRandomAgents = options.useRandomAgents
         self.cookie = options.cookie
